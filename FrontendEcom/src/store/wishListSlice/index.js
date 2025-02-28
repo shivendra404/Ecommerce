@@ -36,9 +36,9 @@ export const fetchWishItems = createAsyncThunk(
                 withCredentials: true
             }
         );
-console.log(response);
+        console.log('response,response', response);
 
-        return response.data;
+        return response?.data;
     }
 );
 
@@ -95,7 +95,7 @@ const wishListSlice = createSlice({
                 }
                 console.log("action from addcase", action);
                 state.isLoading = false;
-                state.wishListItems = action.payload.data;
+                state.wishListItems = action.payload?.data;
             })
             .addCase(deleteWishItem.rejected, (state) => {
                 state.isLoading = false;
@@ -128,8 +128,10 @@ const wishListSlice = createSlice({
                 state.isLoading = true;
             })
             .addCase(fetchWishItems.fulfilled, (state, action) => {
+                console.log("respoense, respone 2", action.payload);
+
                 state.isLoading = false;
-                state.wishListItems = action.payload.data;
+                state.wishListItems = action?.payload?.data;
             })
             .addCase(fetchWishItems.rejected, (state) => {
                 state.isLoading = false;

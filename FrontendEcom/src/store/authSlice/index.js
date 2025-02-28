@@ -26,12 +26,16 @@ export const loginUser = createAsyncThunk("auth/login", async (formData) => {
 
 
 export const checkAuth = createAsyncThunk("auth/checkauth", async () => {
+    console.log("hello1");
+
     const response = await axios.get("http://localhost:9000/api/v1/user/currentUser", {
         withCredentials: true,
     });
     // console.log(response, "from authslice checkauth");
 
-    return response.data;
+    console.log("hello");
+
+    return response.data ? response.data : res;
 });
 
 

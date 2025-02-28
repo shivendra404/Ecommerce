@@ -1,5 +1,5 @@
 import { Router } from "express"
-import { registerProduct, updateProduct, updateProductImage, getAllProduct, getProduct } from "../controllers/product.controller.js"
+import { registerProduct, updateProduct, updateProductImage, getAllProduct, getProduct, getSearchProduct } from "../controllers/product.controller.js"
 import { upload } from '../middleware/multer.middleware.js'
 import { verifyJWT } from '../middleware/authn.middleware.js'
 import { authorizeRoles } from "../middleware/authz.middleware.js"
@@ -16,6 +16,8 @@ router.route("/updateProduct").patch(verifyJWT, authorizeRoles(["admin"]), updat
 router.route("/updateProductImage").patch(verifyJWT, authorizeRoles(["admin"]), upload.single("productImage"), updateProductImage)
 router.route("/getAllProduct").get(getAllProduct)
 router.route("/getProduct/:id").get(getProduct)
+router.route("/getSearchedProduct/:searchQuery").get(getSearchProduct)
+
 
 
 export default router;

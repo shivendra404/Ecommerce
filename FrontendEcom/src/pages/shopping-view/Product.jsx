@@ -3,42 +3,39 @@ import Loader from '@/components/auth/Loader';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { FaHeart, FaShoppingCart } from 'react-icons/fa';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 function Product() {
-    const [products, setProducts] = useState([])
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
 
-    useEffect(() => {
+    const { productItems, isLoading } = useSelector(state => state.product)
 
-        const fetchAllProducts = async () => {
-            setLoading(true);
-            try {
-                const response = await axios.get('http://localhost:9000/api/v1/product/getAllProduct', {
-                    withCredentials: true
-                });
-                // console.log(response);
+    // useEffect(() => {
+    //     const fetchAllProducts = async () => {
+    //         setLoading(true);
+    //         try {
+    //             const response = await axios.get('http://localhost:9000/api/v1/product/getAllProduct', {
+    //                 withCredentials: true
+    //             });
+    //             console.log(response);
 
-                // console.log("response", response?.data?.data);
-                setProducts(response?.data?.data);
+    //             setProducts(response?.data?.data);
 
 
 
-            } catch (error) {
-                console.error('Error fetching brands:', error);
-                setError('Failed to fetch brands');
-            } finally {
-                setLoading(false);
-            }
-        };
+    //         } catch (error) {
+    //             console.error('Error fetching brands:', error);
+    //             setError('Failed to fetch brands');
+    //         } finally {
+    //             setLoading(false);
+    //         }
+    //     };
 
-        fetchAllProducts();
-    }, []);
+    //     fetchAllProducts();
+    // }, []);
 
-    // console.log(products);
 
-    if (loading) {
+    if (isLoading) {
         return <div>
             <Loader />
         </div>
@@ -47,9 +44,11 @@ function Product() {
     return (
         <div className="container mx-auto px-4 sm:px-6 py-8">
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6">
-                {products.map((product) => (
-                    <ProductCard key={product._id} product={product} />
-                ))}
+                {
+                    productItems && productItems.map((product) => (
+                        <ProductCard key={product._id} product={product} />
+                    ))
+                }
             </div>
         </div>
     );
@@ -62,7 +61,6 @@ export default Product
 
 const ProductCard = ({ product }) => {
 
-    // console.log(products);
 
     return !product ? (
         <div><Loader /></div>
@@ -74,7 +72,7 @@ const ProductCard = ({ product }) => {
             {/* Image Container with Taller Aspect Ratio */}
             <div className="relative h-[24rem] w-full aspect-[4/5] overflow-hidden">
                 <img
-                    src={product.prodImage}
+                    src={product?.prodImage?.url || product?.prodImage}
                     alt={product.productName}
                     className="w-full h-full object-cover transform transition-transform duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] group-hover:scale-110"
                 />

@@ -44,10 +44,14 @@ const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // console.log('isAuthenticate jjjjjjjjjjjjj', isAuthenticate);
+    console.log(isAuthenticate, "1");
 
+    // console.log('isAuthenticate jjjjjjjjjjjjj', isAuthenticate);
+    dispatch(checkAuth()).then((data) => {
+      console.log("response first app", data);
+    })
+    console.log(isAuthenticate, "2")
     if (isAuthenticate) {
-      dispatch(checkAuth())
       dispatch(getWishListCount())
       dispatch(getAddToCartCount())
     }
@@ -87,6 +91,7 @@ const App = () => {
           <Route path='' element={<ShoppingLayout />}>
             <Route path='' element={<ShoppingHome />} />
             <Route path='products' element={<Product />} />
+            <Route path='serachedroducts' element={<Product />} />
             <Route path='about' element={<About />} />
             <Route path='contact' element={<Contact />} />
             <Route path='product/:id' element={<ProductDescCard />} />

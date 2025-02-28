@@ -206,43 +206,56 @@ const getProduct = asyncHandler(async (req, res) => {
 
 const getSearchProduct = asyncHandler(async (req, res) => {
 
-    const { keyword } = req.params
+    const { searchQuery } = req.params
 
-    if (keyword && typeof keyword !== "string") {
+    if (searchQuery && typeof searchQuery !== "string") {
         return res.status(400).json(
             new ApiResponse(400, {}, "Keyword is required and must be in string format")
         )
     }
 
-    const pipeline = []
+    const pipeline = [];
 
 
-    if (query) {
+    console.log("hii");
+
+    if (searchQuery) {
         pipeline.push(
             {
-                $search: {
-                    index: "default", // Replace "default" with your actual text index name if it's custom.
-                    text: {
-                        query: query, // The text search query
-                        path: ["title", "description"] // The field to search on; replace with the actual field name
-                    }
+                $match: {
+                    $text: { $search: searchQuery } // Replaces `$search` with `$text`
                 }
             },
             {
                 $addFields: {
-                    score: { $meta: "searchScore" } // Add the relevance score to the documents
+                    score: { $meta: "textScore" } // Use `textScore` for sorting results
                 }
             },
             {
                 $sort: {
-                    score: -1 // Sort by the relevance score in descending order
+                    score: -1
                 }
-            });
+            }
+        );
     }
 
+    // If no search query, return all documents
+    if (pipeline.length === 0) {
+        pipeline.push({ $match: {} });
+    }
 
-    const searchResults = await Product.find(createSearchQuery);
+    console.log("hii2");
+
+    const searchResults = await Product.aggregate(pipeline);
+
+    console.log(searchResults);
+
+
+    return res
+        .status(200)
+        .json(new ApiResponse(200, searchResults, "product fetched successfully"));
+
 
 })
 
-export { registerProduct, updateProduct, updateProductImage, getAllProduct, getProduct }
+export { registerProduct, updateProduct, updateProductImage, getAllProduct, getProduct, getSearchProduct }

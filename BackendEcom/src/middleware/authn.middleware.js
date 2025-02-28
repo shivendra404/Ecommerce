@@ -2,13 +2,16 @@ import { ApiError } from '../utils/ApiError.js';
 import { asyncHandler } from "../utils/asyncHandler.js"
 import jwt from "jsonwebtoken"
 import { User } from "../models/user.model.js"
+import { refreshAccessToken } from '../controllers/user.controller.js'
 
 
 
 export const verifyJWT = asyncHandler(async (req, res, next) => {
 
     try {
-        const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ", "")
+        const token = req.cookies?.accessToken
+        // || req.header("Authorization")?.replace("Bearer ", "")
+        console.log(token);
 
         if (!token) {
             throw new ApiError(401, "Unauthorized request")
@@ -32,17 +35,17 @@ export const verifyJWT = asyncHandler(async (req, res, next) => {
         next();
     } catch (error) {
         console.log('error', error);
+        // console.log(error?.name == "TokenExpiredError");
 
         if (error?.name == "TokenExpiredError") {
-            return res.status(401).json({
-                status: "error",
-                code: 'TOKEN_EXPIRED',
-                message: error.message,
-                expiredAt: error.expiredAt,  
-                solution: '/api/auth/refresh',
-            })
+            // console.log("hiiiii");
+            refreshAccessToken(req, res, next)
+
         }
-        throw new ApiError(401, error?.message || "Invalid access token")
+        else {
+
+            throw new ApiError(401, error?.message || "Invalid access token")
+        }
     }
 
 })

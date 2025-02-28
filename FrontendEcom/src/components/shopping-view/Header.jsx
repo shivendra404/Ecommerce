@@ -18,13 +18,14 @@ import { logoutUser } from '@/store/authSlice';
 import { fetchWishItems } from '@/store/wishListSlice';
 import { fetchCartItems } from '@/store/addToCartSlice';
 import { fetchOrderItems } from '@/store/orderSlice';
+import { getProduct, searchedProduct } from '@/store/productSlice';
 
 const Header = () => {
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const location = useLocation()
-  const [serachQuery, setSearchQuery] = useState("")
+  const [searchQuery, setSearchQuery] = useState("")
 
   const { isAuthenticate } = useSelector(state => state.auth)
   const [activeIcon, setActiveIcon] = useState(0) //making solid wishlist addtocard and order icon in header
@@ -34,9 +35,6 @@ const Header = () => {
     // console.log("hii");
     dispatch(logoutUser())
   };
-
-
-
 
 
   useEffect(() => {
@@ -136,11 +134,21 @@ const Header = () => {
     }
   }
 
+  function handleProduct() {
+    // console.log("called product");
 
-  function handleSarchQuery(e) {
+    dispatch(getProduct())
+
+
+    // console.log(" get product");
+
+  }
+
+  function handleSearchQuery(e) {
     if (e.key === 'Enter') {
 
-      console.log(serachQuery);
+      dispatch(searchedProduct(searchQuery))
+      navigate("serachedroducts")
     }
 
   }
@@ -167,7 +175,7 @@ const Header = () => {
                   placeholder="Search products..."
                   className="w-full px-4 py-1 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
                   onChange={(e) => { setSearchQuery(e.target.value) }}
-                  onKeyDown={handleSarchQuery}
+                  onKeyDown={handleSearchQuery}
                 />
                 <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
                   <MagnifyingGlassIcon className="h-4 w-4 text-gray-400" />
@@ -262,12 +270,14 @@ const Header = () => {
               >
                 Home
               </NavLink>
+
               <NavLink
                 to="/products"
                 className={({ isActive }) => {
                   const activeClass = isActive ? 'text-emerald-600 font-bold' : 'text-gray-700';
                   return `hover:text-emerald-600 transition-colors duration-300 relative group ${activeClass}`;
                 }}
+                onClick={handleProduct}
               >
                 Products
 

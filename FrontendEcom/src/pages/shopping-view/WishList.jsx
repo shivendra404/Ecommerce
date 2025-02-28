@@ -8,7 +8,7 @@ const WishList = () => {
 
 
     const { isLoading, wishListItems } = useSelector(state => state.wishList)
-    console.log(wishListItems);
+    console.log("wwwwwwwwwwwwwwwwwwwwwwwww", wishListItems);
     // console.log(wishListItems);
 
 
