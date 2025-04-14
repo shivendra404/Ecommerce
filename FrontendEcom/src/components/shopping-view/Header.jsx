@@ -17,7 +17,7 @@ import { LogIn, LogOut } from 'lucide-react'
 import { logoutUser } from '@/store/authSlice';
 import { fetchWishItems } from '@/store/wishListSlice';
 import { fetchCartItems } from '@/store/addToCartSlice';
-import { fetchOrderItems } from '@/store/orderSlice';
+// import { fetchOrderItems } from '@/store/orderSlice';
 import { getProduct, searchedProduct } from '@/store/productSlice';
 
 const Header = () => {
@@ -95,16 +95,16 @@ const Header = () => {
 
   function showOrders() {
     if (!isAuthenticate) {
-      navigate('/auth/login', {
-        state: {
-          from: "/orders",
-        },
-        replace: true
-      });
-      return;
+      // navigate('/auth/login', {
+      //   state: {
+      //     from: "/orders",
+      //   },
+      //   replace: true
+      // });
+      // return;
     } else {
-      dispatch(fetchOrderItems())
-      navigate("/orders",)
+      // dispatch(fetchOrderItems())
+      // navigate("/orders",)
     }
 
   }

@@ -1,22 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const initialState = {
-    isLoading: true,
-    orderCount: null,
-    OrderItems: []
-};
+export const createNewOrder = createAsyncThunk("/order/createOrder",
 
-
-export const addToOrder = createAsyncThunk(
-    "order/addToOrder",
-
-    async ({ productId, productPrice, productQuantity, description }) => {
+    async (orderData) => {
         const response = await axios.post(
-            'http://localhost:9000/api/v1/order',
-            {
-                productId, productPrice, productQuantity, description
-            },
+            'http://localhost:9000/api/v1/order/create',
+            orderData,
             {
                 withCredentials: true
             }
@@ -25,66 +15,34 @@ export const addToOrder = createAsyncThunk(
 
         return response.data;
     }
-);
+)
 
 
-export const fetchOrderItems = createAsyncThunk(
-    "order/fetchAllOrder",
-    async () => {
-        const response = await axios.get(
-            'http://localhost:9000/api/v1/order', {
-            withCredentials: true
-        }
+export const captureOrder = createAsyncThunk("/order/captureOrder",
+    async ({ paymentId, payerId, orderId }) => {
+        // console.log("paymentId", paymentId);
+        // console.log("payerId", payerId);
+        console.log("jii444444444444444444444");
+
+
+        const response = await axios.post(
+            'http://localhost:9000/api/v1/order/capture',
+            { paymentId, payerId, orderId },
+            {
+                withCredentials: true
+            }
         );
+
 
         return response.data;
     }
-);
+)
 
-// export const deleteCartItem = createAsyncThunk(
-//     "cart/deleteCartItem",
-//     async ({ userId, productId }) => {
-//         const response = await axios.delete(
-//             'http://localhost:9000/api/v1/wishList/addWishListItem'
-//         );
-
-//         return response.data;
-//     }
-// );
-
-// export const updateCartQuantity = createAsyncThunk(
-//     "cart/updateCartQuantity",
-//     async ({ userId, productId, quantity }) => {
-//         const response = await axios.put(
-//             'http://localhost:9000/api/v1/wishList/addWishListItem',
-//             {
-//                 userId,
-//                 productId,
-//                 quantity,
-//             }
-//         );
-
-//         return response.data;
-//     }
-// );
-
-
-export const getOrderCount = createAsyncThunk(
-    "addToCard/getAddToCartCount",
-    async () => {
-        const response = await axios.get(
-            "http://localhost:9000/api/v1/addToCart/itemCount", {
-            withCredentials: true
-        }
-        );
-        // console.log(response);
-
-        return response.data;
-    }
-);
-
-
-
+const initialState = {
+    approvalURL: null,
+    isLoading: false,
+    orderId: null
+}
 
 const orderSlice = createSlice({
     name: "order",
@@ -94,39 +52,43 @@ const orderSlice = createSlice({
     },
     extraReducers: ((builder) => {
         builder.
-            addCase(addToOrder.pending, (state) => {
+            addCase(createNewOrder.pending, (state) => {
                 state.isLoading = true;
             })
-            .addCase(addToOrder.fulfilled, (state, action) => {
+            .addCase(createNewOrder.fulfilled, (state, action) => {
                 state.isLoading = false;
-                state.OrderItems = action.payload.data;
+                state.approvalURL = action.payload.approvalURL;
+                state.orderId = action.payload.orderId;
+                sessionStorage.setItem("currentOrderId", JSON.stringify(action.payload.orderId))
             })
-            .addCase(addToOrder.rejected, (state) => {
+            .addCase(createNewOrder.rejected, (state) => {
                 state.isLoading = false;
-                state.OrderItems = [];
+                state.approvalURL = null;
+                state.orderId = [];
+
             })
-            .addCase(getOrderCount.pending, (state) => {
-                state.isLoading = true;
-            })
-            .addCase(getOrderCount.fulfilled, (state, action) => {
-                state.isLoading = false;
-                state.orderCount = action?.payload?.data?.count
-            })
-            .addCase(getOrderCount.rejected, (state) => {
-                state.isLoading = false;
-                state.orderCount = null
-            })
-            .addCase(fetchOrderItems.pending, (state) => {
-                state.isLoading = true;
-            })
-            .addCase(fetchOrderItems.fulfilled, (state, action) => {
-                state.isLoading = false;
-                state.OrderItems = action.payload.data;
-            })
-            .addCase(fetchOrderItems.rejected, (state) => {
-                state.isLoading = false;
-                state.OrderItems = []
-            })
+        // .addCase(getOrderCount.pending, (state) => {
+        //     state.isLoading = true;
+        // })
+        // .addCase(getOrderCount.fulfilled, (state, action) => {
+        //     state.isLoading = false;
+        //     state.orderCount = action?.payload?.data?.count
+        // })
+        // .addCase(getOrderCount.rejected, (state) => {
+        //     state.isLoading = false;
+        //     state.orderCount = null
+        // })
+        // .addCase(fetchOrderItems.pending, (state) => {
+        // state.isLoading = true;
+        // })
+        // .addCase(fetchOrderItems.fulfilled, (state, action) => {
+        //     state.isLoading = false;
+        //     state.OrderItems = action.payload.data;
+        // })
+        // .addCase(fetchOrderItems.rejected, (state) => {
+        //     state.isLoading = false;
+        //     state.OrderItems = []
+        // })
     })
 })
 

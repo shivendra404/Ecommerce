@@ -6,7 +6,7 @@ import { ApiResponse } from '../utils/ApiResponse.js'
 import { Product } from "../models/product.model.js";
 
 // Create a new item in the card
-const createAddToCard = asyncHandler(async (req, res) => {
+const createAddToCard = asyncHandler(async (req, res,next) => {
     const { product, quantity } = req.body;
     const userId = req?.user?._id;
 

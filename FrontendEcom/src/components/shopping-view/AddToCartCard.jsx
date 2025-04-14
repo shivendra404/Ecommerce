@@ -1,4 +1,4 @@
-import { deleteCartItem } from '@/store/addToCartSlice';
+import { deleteCartItem, fetchCartItems } from '@/store/addToCartSlice';
 import axios from 'axios';
 import React, { useState } from 'react';
 import { FaTrash, FaShoppingCart, FaShoppingBag } from 'react-icons/fa';
@@ -9,16 +9,20 @@ const AddToCartCard = ({ item }) => {
     const [quantity, setQuantity] = useState(item.quantity);
     const dispatch = useDispatch()
 
-    
+
     const handleDeleteAddToCart = (id) => {
         dispatch(deleteCartItem({ id }))
     }
 
     const handleUpdateQunatity = async (quantity, id) => {
+        console.log("addto quantity");
+
         const res = await axios.patch(`http://localhost:9000/api/v1/addToCart/${id}`,
             { quantity },
             { withCredentials: true })
-        console.log(res);
+        // console.log(res);
+
+        dispatch(fetchCartItems())
     }
 
     return (
@@ -96,10 +100,10 @@ const AddToCartCard = ({ item }) => {
                             <span className="text-sm font-medium">Delete</span>
                         </button>
 
-                        <button className="flex items-center justify-center gap-2 bg-gray-800 text-white px-6 py-3 rounded-lg hover:bg-gray-900 active:bg-gray-700 transition-colors flex-1">
+                        {/* <button className="flex items-center justify-center gap-2 bg-gray-800 text-white px-6 py-3 rounded-lg hover:bg-gray-900 active:bg-gray-700 transition-colors flex-1">
                             <FaShoppingBag className="text-lg" />
                             <span className="text-sm font-medium">Buy Now</span>
-                        </button>
+                        </button> */}
                     </div>
                 </div>
             </div>

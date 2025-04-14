@@ -7,7 +7,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { toast } from "sonner";
 import { addWishlist, getWishListCount } from '@/store/wishListSlice';
 import { addToCart, getAddToCartCount } from '@/store/addToCartSlice';
-import { addToOrder } from '@/store/orderSlice/index.js';
+// import { addToOrder } from '@/store/orderSlice/index.js';
 import Loader from '../auth/Loader';
 
 function ProductDescCard() {
@@ -189,74 +189,74 @@ function ProductDescCard() {
     };
 
 
-    const handleOrder = async () => {
-        if (!isAuthenticate) {
-            navigate('/auth/login', {
-                state: {
-                    from: location.pathname, // Current page path
-                    product: product._id    // Optional: Store product ID
-                },
-                replace: true
-            });
-            return;
-        }
+    // const handleOrder = async () => {
+    //     if (!isAuthenticate) {
+    //         navigate('/auth/login', {
+    //             state: {
+    //                 from: location.pathname, // Current page path
+    //                 product: product._id    // Optional: Store product ID
+    //             },
+    //             replace: true
+    //         });
+    //         return;
+    //     }
 
-        try {
+    //     try {
 
-            const productPrice = product.price * quantity
-            const productQuantity = quantity
-            const description = product.description
-            const productId = product._id
+    //         const productPrice = product.price * quantity
+    //         const productQuantity = quantity
+    //         const description = product.description
+    //         const productId = product._id
 
 
-            dispatch(addToOrder({
-                productId: productId,
-                productPrice: productPrice,
-                productQuantity: productQuantity,
-                description: description
-            })).then((response) => {
-                console.log("response from dispatched cart", response);
-                if (response?.payload?.success) {
-                    toast(response?.payload?.message, {
-                        action: {
-                            label: "Undo",
-                            onClick: () => console.log("Undo"),
-                        },
-                        style: {
-                            backgroundColor: 'rgba(76, 175, 80, 0.8)', // Light green with transparency
-                            color: '#FFFFFF'
-                        },
-                    });
-                } else {
-                    toast("Order is not added to addtocart", {
-                        action: {
-                            label: "Retry",
-                            onClick: () => console.log("Retry"),
-                        },
-                        style: {
-                            backgroundColor: 'rgba(244, 67, 54, 0.8)', // Red with transparency
-                            color: '#FFFFFF'
-                        },
-                    });
-                }
-                dispatch(getAddToCartCount())
-            })
-        } catch (error) {
-            toast("order is not added to addtocart", {
-                action: {
-                    label: "Retry",
-                    onClick: () => console.log("Retry"),
-                },
-                style: {
-                    backgroundColor: 'rgba(244, 67, 54, 0.8)', // Red with transparency
-                    color: '#FFFFFF'
-                },
-            });
-        } finally {
-            // setIsAddingToCart(false);
-            setQuantity(1)
-        }
-    }
+    //         dispatch(addToOrder({
+    //             productId: productId,
+    //             productPrice: productPrice,
+    //             productQuantity: productQuantity,
+    //             description: description
+    //         })).then((response) => {
+    //             console.log("response from dispatched cart", response);
+    //             if (response?.payload?.success) {
+    //                 toast(response?.payload?.message, {
+    //                     action: {
+    //                         label: "Undo",
+    //                         onClick: () => console.log("Undo"),
+    //                     },
+    //                     style: {
+    //                         backgroundColor: 'rgba(76, 175, 80, 0.8)', // Light green with transparency
+    //                         color: '#FFFFFF'
+    //                     },
+    //                 });
+    //             } else {
+    //                 toast("Order is not added to addtocart", {
+    //                     action: {
+    //                         label: "Retry",
+    //                         onClick: () => console.log("Retry"),
+    //                     },
+    //                     style: {
+    //                         backgroundColor: 'rgba(244, 67, 54, 0.8)', // Red with transparency
+    //                         color: '#FFFFFF'
+    //                     },
+    //                 });
+    //             }
+    //             dispatch(getAddToCartCount())
+    //         })
+    //     } catch (error) {
+    //         toast("order is not added to addtocart", {
+    //             action: {
+    //                 label: "Retry",
+    //                 onClick: () => console.log("Retry"),
+    //             },
+    //             style: {
+    //                 backgroundColor: 'rgba(244, 67, 54, 0.8)', // Red with transparency
+    //                 color: '#FFFFFF'
+    //             },
+    //         });
+    //     } finally {
+    //         // setIsAddingToCart(false);
+    //         setQuantity(1)
+    //     }
+    // }
 
 
     useEffect(() => {
@@ -266,6 +266,10 @@ function ProductDescCard() {
         }
     }, [dispatch, isAuthenticate])
 
+
+    // if(location.pathname === "/addtocarts" &&)
+
+
     if (loading) {
         return (<div><Loader /></div>)
     }
@@ -273,7 +277,6 @@ function ProductDescCard() {
     if (error) {
         return (<div>{error}</div>)
     }
-
 
 
     return (
@@ -348,7 +351,7 @@ function ProductDescCard() {
                         <span className="text-sm font-medium">Wishlist</span>
                     </button>
 
-                    <button onClick={handleOrder} className="flex items-center justify-center gap-2 bg-gray-800 text-white px-6 py-3 rounded-lg hover:bg-gray-900 transition-colors flex-1">
+                    <button  className="flex items-center justify-center gap-2 bg-gray-800 text-white px-6 py-3 rounded-lg hover:bg-gray-900 transition-colors flex-1">
                         <FaShoppingBag className="text-lg" />
                         <span className="text-sm font-medium">Buy Now</span>
                     </button>

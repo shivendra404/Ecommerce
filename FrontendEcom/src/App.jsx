@@ -25,6 +25,8 @@ import { getAddToCartCount } from './store/addToCartSlice/index.js'
 import Order from './pages/shopping-view/Order.jsx'
 import AddToCart from './pages/shopping-view/AddToCart.jsx'
 import WishList from './pages/shopping-view/WishList.jsx'
+import PaypalReturn from './pages/shopping-view/PaypalReturn.jsx'
+import PaymentSuccess from './pages/shopping-view/paymentSuccess.jsx'
 
 
 const App = () => {
@@ -44,13 +46,13 @@ const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log(isAuthenticate, "1");
+    // console.log(isAuthenticate, "1");
 
     // console.log('isAuthenticate jjjjjjjjjjjjj', isAuthenticate);
     dispatch(checkAuth()).then((data) => {
-      console.log("response first app", data);
+      // console.log("response first app", data);
     })
-    console.log(isAuthenticate, "2")
+    // console.log(isAuthenticate, "2")
     if (isAuthenticate) {
       dispatch(getWishListCount())
       dispatch(getAddToCartCount())
@@ -110,9 +112,18 @@ const App = () => {
                 <Order />
               </CheckAuth >
             } />
+            <Route path='paypal-return' element={
+              <CheckAuth isAuthenticated={isAuthenticate} user={user}>
+                <PaypalReturn />
+             </CheckAuth >
+            } />
+             <Route path='payment-success' element={
+              <CheckAuth isAuthenticated={isAuthenticate} user={user}>
+                <PaymentSuccess />
+             </CheckAuth >
+            } />
           </Route>
-
-
+         
           <Route path='*' element={<h1>Not Found</h1>} />
         </Routes>
       </div >

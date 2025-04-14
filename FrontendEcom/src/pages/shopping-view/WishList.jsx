@@ -2,13 +2,13 @@ import React from 'react';
 import WishlistCard from '../../components/shopping-view/WishListCard'; // Adjust the import path as necessary
 import { useSelector } from 'react-redux';
 import Loader from '@/components/auth/Loader';
-import OrderCard from '@/components/shopping-view/OrderCard';
+// import OrderCard from '@/components/shopping-view/OrderCard';
 
 const WishList = () => {
 
 
     const { isLoading, wishListItems } = useSelector(state => state.wishList)
-    console.log("wwwwwwwwwwwwwwwwwwwwwwwww", wishListItems);
+    // console.log("wwwwwwwwwwwwwwwwwwwwwwwww", wishListItems);
     // console.log(wishListItems);
 
 

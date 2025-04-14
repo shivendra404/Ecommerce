@@ -1,8 +1,9 @@
 
 import React, { useEffect, useState } from 'react';
 import AddToCartCard from '../../components/shopping-view/AddToCartCard'; // Adjust the import path as necessary
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Loader from '@/components/auth/Loader';
+import { createNewOrder } from '@/store/orderSlice';
 
 function AddToCart() {
 
@@ -10,32 +11,83 @@ function AddToCart() {
     const { isLoading, addToCart } = useSelector(state => state.addToCart)
     const [totalAmount, setTotalAmount] = useState(0)
     const [subItems, setSubItems] = useState(0)
-    console.log(addToCart);
-
-
-
-
+    const dispatch = useDispatch()
+    const [isPaymentStart, setIsPaymentStart] = useState(false);
     // console.log(addToCart);
-    useEffect(() => {
-        console.log(addToCart);
+    const { approvalURL } = useSelector(state => state.order)
 
-        if (addToCart) {
+
+
+    useEffect(() => {
+
+
+        if (addToCart.length > 0) {
 
             // Calculate values directly without inner functions
-            // const totalAmount = addToCart.reduce(
-            //     (total, item) => total + item.quantity * item.product.price,
-            //     0
-            // );
-            // const subItems = addToCart.reduce(
-            //     (subTotal, item) => subTotal + item.quantity,
-            //     0
-            // );
+            const totalAmount = addToCart.reduce(
+                (total, item) => total + item.quantity * item.product.price,
+                0
+            );
+            const subItems = addToCart.reduce(
+                (subTotal, item) => subTotal + item.quantity,
+                0
+            );
 
             setSubItems(subItems);
             setTotalAmount(totalAmount);
         }
-    }, [addToCart]);
+    });
 
+    const addressInfo = {
+        address: "basantpur",
+        city: "Faridabad",
+        pincode: "121004",
+        phone: "9999999999",
+        notes: "notes is note"
+    }
+
+    function handleInitialPaypalPayment() {
+
+        const orderData = {
+            cartItems: addToCart.map(singleCardItem => ({
+                productId: singleCardItem.product._id,
+                name: singleCardItem.product.productName,
+                image: singleCardItem.product.prodImage.url,
+                price: singleCardItem.product.price,
+                quantity: singleCardItem.quantity
+            })),
+            // cartId: addToCart?._id,
+            addressInfo,
+            orderStatus: "pending",
+            paymentMethod: "paypal",
+            paymethodStatus: "pending",
+            totalAmount: totalAmount,
+            orderDate: new Date(),
+            orderUpdateDate: new Date(),
+            paymentId: "",
+            payerId: "",
+            isProductDelivered: false,
+        }
+
+        console.log("orderssssss", orderData);
+        dispatch(createNewOrder(orderData)).then((data) => {
+            console.log(data, "shivendrakumar");
+
+            if (data?.payload?.success) {
+                setIsPaymentStart(true);
+            }
+            else {
+                setIsPaymentStart(false);
+            }
+
+        })
+    }
+
+    if (approvalURL && isPaymentStart) {
+
+
+        window.location.href = approvalURL;
+    }
     return (isLoading ? <Loader /> :
         <div className="flex p-4 border border-gray-300 rounded-lg">
             <div className="container mx-auto p-4">
@@ -66,10 +118,12 @@ function AddToCart() {
 
                 {/* Bottom Section - Button */}
                 <div className="border-t border-gray-100 pt-4 sticky">
-                    <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold 
+                    <button
+                        onClick={handleInitialPaypalPayment}
+                        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold 
                       py-3 px-6 rounded-lg transition-all duration-200 shadow-sm
                       hover:shadow-md active:scale-95">
-                        Proceed to Buy
+                        Proceed to checkout
                     </button>
                 </div>
             </div>

@@ -8,31 +8,8 @@ import { Link } from 'react-router-dom';
 
 function Product() {
 
+    //Taking the produvt data from redux when somebody want product list by search or route /product
     const { productItems, isLoading } = useSelector(state => state.product)
-
-    // useEffect(() => {
-    //     const fetchAllProducts = async () => {
-    //         setLoading(true);
-    //         try {
-    //             const response = await axios.get('http://localhost:9000/api/v1/product/getAllProduct', {
-    //                 withCredentials: true
-    //             });
-    //             console.log(response);
-
-    //             setProducts(response?.data?.data);
-
-
-
-    //         } catch (error) {
-    //             console.error('Error fetching brands:', error);
-    //             setError('Failed to fetch brands');
-    //         } finally {
-    //             setLoading(false);
-    //         }
-    //     };
-
-    //     fetchAllProducts();
-    // }, []);
 
 
     if (isLoading) {

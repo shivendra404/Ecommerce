@@ -1,5 +1,5 @@
 import { addToCart, getAddToCartCount } from '@/store/addToCartSlice';
-import { addToOrder } from '@/store/orderSlice';
+// import { addToOrder } from '@/store/orderSlice';
 import { deleteWishItem } from '@/store/wishListSlice';
 import axios from 'axios';
 import React, { useState } from 'react';
@@ -73,72 +73,72 @@ const WishListCard = ({ item }) => {
     const { isAuthenticate } = useSelector(state => state.auth)
 
 
-    const handleOrder = async () => {
-        if (!isAuthenticate) {
-            navigate('/auth/login', {
-                state: {
-                    from: location.pathname, // Current page path
-                    product: product._id    // Optional: Store product ID
-                },
-                replace: true
-            });
-            return;
-        }
+    // const handleOrder = async () => {
+    //     if (!isAuthenticate) {
+    //         navigate('/auth/login', {
+    //             state: {
+    //                 from: location.pathname, // Current page path
+    //                 product: product._id    // Optional: Store product ID
+    //             },
+    //             replace: true
+    //         });
+    //         return;
+    //     }
 
-        try {
+    //     try {
 
-            const productPrice = product.price * quantity
-            const productQuantity = quantity
-            const description = product.description
-            const productId = product._id
-            // console.log(productPrice, productQuantity, description, productId);
+    //         const productPrice = product.price * quantity
+    //         const productQuantity = quantity
+    //         const description = product.description
+    //         const productId = product._id
+    //         // console.log(productPrice, productQuantity, description, productId);
 
 
-            dispatch(addToOrder({
-                productId: productId,
-                productPrice: productPrice,
-                productQuantity: productQuantity,
-                description: description
-            })).then((response) => {
-                // console.log("response from dispatched cart", response);
-                if (response?.payload?.success) {
-                    toast(response?.payload?.message, {
-                        action: {
-                            label: "Undo",
-                            onClick: () => console.log("Undo"),
-                        },
-                        style: {
-                            backgroundColor: 'rgba(76, 175, 80, 0.8)', // Light green with transparency
-                            color: '#FFFFFF'
-                        },
-                    });
-                } else {
-                    toast("Order is not added to addtocart", {
-                        action: {
-                            label: "Retry",
-                            onClick: () => console.log("Retry"),
-                        },
-                        style: {
-                            backgroundColor: 'rgba(52, 50, 50, 0.8)', // Red with transparency
-                            color: '#FFFFFF'
-                        },
-                    });
-                }
-                dispatch(getAddToCartCount())
-            })
-        } catch (error) {
-            toast("order is not added to addtocart", {
-                action: {
-                    label: "Retry",
-                    onClick: () => console.log("Retry"),
-                },
-                style: {
-                    backgroundColor: 'rgba(52, 50, 50, 0.8)', // Red with transparency
-                    color: '#FFFFFF'
-                },
-            });
-        }
-    }
+    //         dispatch(addToOrder({
+    //             productId: productId,
+    //             productPrice: productPrice,
+    //             productQuantity: productQuantity,
+    //             description: description
+    //         })).then((response) => {
+    //             // console.log("response from dispatched cart", response);
+    //             if (response?.payload?.success) {
+    //                 toast(response?.payload?.message, {
+    //                     action: {
+    //                         label: "Undo",
+    //                         onClick: () => console.log("Undo"),
+    //                     },
+    //                     style: {
+    //                         backgroundColor: 'rgba(76, 175, 80, 0.8)', // Light green with transparency
+    //                         color: '#FFFFFF'
+    //                     },
+    //                 });
+    //             } else {
+    //                 toast("Order is not added to addtocart", {
+    //                     action: {
+    //                         label: "Retry",
+    //                         onClick: () => console.log("Retry"),
+    //                     },
+    //                     style: {
+    //                         backgroundColor: 'rgba(52, 50, 50, 0.8)', // Red with transparency
+    //                         color: '#FFFFFF'
+    //                     },
+    //                 });
+    //             }
+    //             dispatch(getAddToCartCount())
+    //         })
+    //     } catch (error) {
+    //         toast("order is not added to addtocart", {
+    //             action: {
+    //                 label: "Retry",
+    //                 onClick: () => console.log("Retry"),
+    //             },
+    //             style: {
+    //                 backgroundColor: 'rgba(52, 50, 50, 0.8)', // Red with transparency
+    //                 color: '#FFFFFF'
+    //             },
+    //         });
+    //     }
+    // }
 
     //dlete the wishlist item
     const handleDeleteWishList = (wishListId) => {

@@ -26,14 +26,14 @@ export const loginUser = createAsyncThunk("auth/login", async (formData) => {
 
 
 export const checkAuth = createAsyncThunk("auth/checkauth", async () => {
-    console.log("hello1");
+    // console.log("hello1");
 
     const response = await axios.get("http://localhost:9000/api/v1/user/currentUser", {
         withCredentials: true,
     });
     // console.log(response, "from authslice checkauth");
 
-    console.log("hello");
+    // console.log("hello");
 
     return response.data ? response.data : res;
 });
@@ -50,7 +50,7 @@ export const logoutUser = createAsyncThunk(
                 withCredentials: true,
             }
         );
-        console.log(response);
+        // console.log(response);
 
 
         return response.data;

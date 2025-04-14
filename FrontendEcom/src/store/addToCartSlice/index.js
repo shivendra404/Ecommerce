@@ -11,7 +11,7 @@ const initialState = {
 export const addToCart = createAsyncThunk(
     "cart/addToCart",
     async ({ productId, quantity }) => {
-        console.log("hii2");
+        // console.log("hii2");
 
         const response = await axios.post(
             'http://localhost:9000/api/v1/addToCart',
@@ -36,7 +36,7 @@ export const fetchCartItems = createAsyncThunk(
             withCredentials: true
         }
         );
-        console.log(response);
+        // console.log(response);
 
         return response.data;
     }
@@ -54,8 +54,8 @@ export const deleteCartItem = createAsyncThunk(
             }
         );
 
-        console.log("rsponse from thunk wishlist delte", response);
-        console.log();
+        // console.log("rsponse from thunk wishlist delte", response);
+        // console.log();
 
 
         // return {}

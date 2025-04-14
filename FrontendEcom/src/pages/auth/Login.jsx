@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux'
 import { loginUser } from '../../store/authSlice/index.js'
 import { toast } from "sonner"
 import { fetchWishItems } from '@/store/wishListSlice'
-import { fetchOrderItems } from '@/store/orderSlice'
+// import { fetchOrderItems } from '@/store/orderSlice'
 import { fetchCartItems } from '@/store/addToCartSlice'
 
 
@@ -52,8 +52,17 @@ function Login() {
                 }
 
                 //After fetching data redirect to thhat route
-                const returnTo = res?.payload?.data?.role === "admin" ? "/admin/dashboard" : location.state?.from || "/"
-                navigate(returnTo)
+                // const returnTo = res?.payload?.data?.role === "admin" ? "/admin/dashboard" : location.state?.from || "/"
+                // navigate(returnTo)
+
+                let returnTo = "/";
+                if (res?.payload?.data?.role === "admin") {
+                    returnTo = "/admin/dashboard";
+                } else if (location.state?.from) {
+                    returnTo = location.state.from;
+                }
+                navigate(returnTo);
+
 
             }
             else {
